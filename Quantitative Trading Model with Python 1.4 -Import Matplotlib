@@ -1,0 +1,39 @@
+Demo code:
+# Import the package "Pandas" and ’Matplotlib' into Jupyter Notebook
+import pandas as pd
+import matplotlib.pyplot as plt 
+%matplotlib inline 
+
+# We import the stock data of Facebook into Jupyter Notebook. The CSV file is located in the folder called "Data_CSV" in your Workspace
+# We then name the DataFrame name as 'fb'
+fb = pd.read_csv('Data_CSV/facebook.csv')
+
+# fb.reset_index(inplace = True)
+
+fb.head() # get the first five rows of the data
+
+fb.shape
+
+fb.describe()
+
+fb.set_index('Date',inplace = True)
+
+fb.index
+
+fb.head()
+
+fb.loc['2015-01-01':'2015-12-31' , 'Close']
+
+x = list(range(0,10))
+y = list(range(-10,0))
+plt.plot(x,y)
+
+a = [0,10,15,23,39,47,89]
+b = [0,15,25,43,19,27,59]
+plt.plot(a,b)
+
+fb.loc['2015-01-01':'2015-12-31','Close'].plot()#2015
+
+fb.loc['2015-01-01':'2015-01-15','Open':'Close' ].plot()#2015
+
+fb.loc['2015-01-01':'2018-12-31','Open' ].plot()#2015-2018
