@@ -1,0 +1,57 @@
+Demo Code:
+# Import the package "Pandas" into Jupyter Notebook
+# If you want to use any modules or functions from pandas, you can type pd FunctionName or pd ModuleName. 
+# Press 'shift' + 'enter' keys to run the cell.
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# We import the stock data of Facebook into Jupyter Notebook. The CSV file is located in the folder called "Data_CSV" in your Workspace
+# We then name the DataFrame name as 'fb'
+# By default Jupiter displays 10 rows and twenty columns from our data frame,just to give us a broad overview of the data.
+fb = pd.read_csv('Data_CSV/facebook.csv')
+
+fb.head() # get the first five rows of the data
+
+fb.index
+
+fb.set_index('Date',inplace = True)
+
+fb.head()
+
+fb.index
+
+fb.loc['2015-01-05', : ]
+
+fb.loc['2015-01-01':'2015-01-07', : ]
+
+fb.reset_index(inplace = True)
+
+fb.head()
+
+fb.iloc[0] #Get the first row
+
+fb.iloc[[0,1]] #Get the first 2 rows of data
+
+fb.iloc[[0,1],2] # #Get the data of 'High' coloumn in first 2 rows of data
+
+fb.iloc[[0,1],[2,3]] # GSelect Rows or Columns by Index Range
+
+fb.iloc[0:5,2:4] # Select Rows or Columns by Index Range
+
+fb.loc[[0,1],['High','Low']] #Get the data of Highs and Lows in first 2 rows of data
+
+fb.index[0] # the first index
+
+fb.index[-1] # the first index
+
+fb.columns[1]
+
+# Shape gives us the number of rows and columns in a tuple form. 
+# This is an attribute.
+fb.shape
+
+# select all the price information of Facebook in 2016.
+fb_2015 = fb.loc['2015-01-01':'2015-12-31']
+
+# print the price of Facebook on '2015-03-16'
+print(fb_2015.loc['2015-03-16'])
