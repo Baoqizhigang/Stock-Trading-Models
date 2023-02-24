@@ -1,0 +1,46 @@
+# Import the package "Pandas" into Jupyter Notebook
+# If you want to use any modules or functions from pandas, you can type pd FunctionName or pd ModuleName. 
+# Press 'shift' + 'enter' keys to run the cell.
+import pandas as pd
+import matplotlib.pyplot as plt 
+%matplotlib inline 
+
+# We import the stock data of Facebook into Jupyter Notebook. The CSV file is located in the folder called "Data_CSV" in your Workspace
+# We then name the DataFrame name as 'fb'
+fb = pd.read_csv('Data_CSV/facebook.csv')
+
+fb.set_index('Date',inplace = True)
+
+fb.head() # get the first five rows of the data
+
+fb ['Price1'] = fb ['Close'].shift(-1)
+
+fb.head()
+
+fb.loc[ : , 'Close':'Price1':3]
+
+fb ['Price1'] = fb ['Close'].shift(1)
+fb.loc[ : , 'Close':'Price1':3]
+
+fb['PriceDiff'] = fb['Price1']-fb['Close']
+
+fb.head()
+
+fb['Return'] = fb['PriceDiff'] / fb['Close']
+
+fb.head()
+
+fb['Direction'] = [1 if fb.loc[ei, 'PriceDiff'] > 0 else -1 for ei in fb.index]
+
+fb.head()
+
+fb['Average3'] = (fb['Close'] + fb['Close'].shift(1) + fb['Close'].shift(2)) / 3.
+
+fb.head()
+
+fb['MA40'] = fb['Close'].rolling(40).mean()
+fb['MA200'] = fb['Close'].rolling(200).mean()
+
+fb['Close'].plot()
+fb['MA40'].plot()
+fb['MA200'].plot()
