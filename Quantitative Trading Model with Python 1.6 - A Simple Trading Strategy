@@ -1,0 +1,55 @@
+# Import the package "Pandas" into Jupyter Notebook
+# If you want to use any modules or functions from pandas, you can type pd FunctionName or pd ModuleName. 
+# Press 'shift' + 'enter' keys to run the cell.
+import pandas as pd
+import matplotlib.pyplot as plt 
+%matplotlib inline
+
+# We import the stock data of Facebook into Jupyter Notebook. The CSV file is located in the folder called "Data_CSV" in your Workspace
+# We then name the DataFrame name as 'fb'
+fb = pd.read_csv('Data_CSV/facebook.csv')
+
+fb.set_index('Date',inplace = True)
+
+fb.head() # get the first five rows of the data
+
+fb['MA10'] = fb['Close'].rolling(10).mean() #fast signal
+fb['MA50'] = fb['Close'].rolling(50).mean() #slow signal
+fb.loc[ : , 'Close': ]
+
+plt.figure(figsize = (20,8))
+fb['Close'].plot(legend = True )
+fb['MA10'].plot(legend = True ) #fast signal
+fb['MA50'].plot(legend = True ) #slow signal
+plt.legend()
+plt.show()
+
+#Add a new column "Shares", if MA10>MA50, denote as 1 (long one share of stock), otherwise, denote as 0 (do nothing)
+fb['Shares'] = [1 if fb.loc[ei,'MA10']>fb.loc[ei,'MA50'] else 0 for ei in fb.index]
+fb.loc[ '2015-05-27':'2017-05-27' , 'MA10': ]
+
+# Daily Profit
+fb['Close1'] = fb['Close'].shift(-1)
+fb[['Close' , 'Close1']]
+
+# Daily profit
+# Add a new column "Profit" using List Comprehension, for any rows in fb, if Shares=1, the profit is calculated as the close price of 
+# tomorrow minus the close price of today. Otherwise the profit is 0.
+# Plot a graph to show the Profit/Loss
+
+plt.figure(figsize = (10,4))
+fb['Profit'] = [fb.loc[ei,'Close1'] - fb.loc[ei,'Close'] if fb.loc[ei,'Shares'] == 1 else 0 for ei in fb.index]
+fb['Profit'].plot()
+plt.axhline(y=0, color='red')
+
+# Cumulative wealth
+# Use .cumsum() to calculate the accumulated wealth over the period
+# use dropna to remove any 'Not a Number'data
+# fb = fb.dropna() 
+fb['Wealth'] = fb['Profit'].cumsum()
+fb.tail() # print the last 5 rows of the dataframe
+
+plt.figure(figsize = (10,4))
+print('Total money you earn is', fb.loc[fb.index[-2],'Wealth'])
+print('Total money you invest is', fb.loc[fb.index[0],'Close'])
+fb['Wealth'].plot()
