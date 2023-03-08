@@ -1,0 +1,80 @@
+#import numpy and pandas package
+import numpy as np
+import pandas as pd
+
+# roll two dice for multiple times
+# find the sum of the faces of two die thrown together
+die = pd.DataFrame([1,2,3,4,5,6])
+sum_of_dice = die.sample(2, replace = True).sum().loc[0] 
+print('Sum of dice is', sum_of_dice)
+
+# The following code mimics the roll dice game for 50 times. And the results are all stored into "Result"
+# Lets try and get the results of 50 sum of faces.
+
+trial = 50
+results = [die.sample(2,replace=True).sum().loc[0] for i in range(trial)]
+results[ :25]
+
+freq = pd.DataFrame(results)[0].value_counts() # count value
+freq
+
+sort_freq = freq.sort_index() #sort index
+sort_freq
+
+sort_freq.plot(kind = 'bar', color = 'blue', figsize = (10,4))
+
+relative_freq = sort_freq/trial
+relative_freq.plot(kind = 'bar', color = 'blue', figsize = (10,4))
+
+trial = 100
+results = [die.sample(2,replace=True).sum().loc[0] for i in range(trial)]
+freq = pd.DataFrame(results)[0].value_counts() # count value
+sort_freq = freq.sort_index() #sort index
+relative_freq = sort_freq/sort_freq.sum()
+relative_freq.plot(kind = 'bar', color = 'blue',figsize = (10,6))
+
+trial = 400
+results = [die.sample(2,replace=True).sum().loc[0] for i in range(trial)]
+freq = pd.DataFrame(results)[0].value_counts() # count value
+sort_freq = freq.sort_index() #sort index
+relative_freq = sort_freq/sort_freq.sum()
+relative_freq.plot(kind = 'bar', color = 'blue',figsize = (10,6))
+
+trial = 800
+results = [die.sample(2,replace=True).sum().loc[0] for i in range(trial)]
+freq = pd.DataFrame(results)[0].value_counts() # count value
+sort_freq = freq.sort_index() #sort index
+relative_freq = sort_freq/sort_freq.sum()
+relative_freq.plot(kind = 'bar', color = 'blue',figsize = (10,6))
+
+trial = 2000
+results = [die.sample(2,replace=True).sum().loc[0] for i in range(trial)]
+freq = pd.DataFrame(results)[0].value_counts() # count value
+sort_freq = freq.sort_index() #sort index
+relative_freq = sort_freq/sort_freq.sum()
+relative_freq.plot(kind = 'bar', color = 'blue',figsize = (10,6))
+
+trial = 10000
+results = [die.sample(2,replace=True).sum().loc[0] for i in range(trial)]
+freq = pd.DataFrame(results)[0].value_counts() # count value
+sort_freq = freq.sort_index() #sort index
+relative_freq = sort_freq/sort_freq.sum()
+relative_freq.plot(kind = 'bar', color = 'blue',figsize = (10,6))
+
+#  use Python to compute all probabilities for X.
+X_distri = pd.DataFrame(index = [2,3,4,5,6,7,8,9,10,11,12])
+X_distri['Prob'] = [1,2,3,4,5,6,5,4,3,2,1]
+X_distri['Prob'] = X_distri['Prob']/36
+X_distri
+
+Mean = (X_distri.index*X_distri['Prob']).sum()
+Var = (((X_distri.index - Mean)**2)*X_distri['Prob']).sum()
+print(Mean, Var)
+
+# if we calculate mean and variance of outcomes (with high enough number of trials, eg 2000000)...
+trial = 2000000
+results = [die.sample(2, replace=True).sum().loc[0] for i in range(trial)]
+
+#print the mean and variance of the 200000 trials
+results = pd.Series(results)
+print(results.mean(), results.var())
