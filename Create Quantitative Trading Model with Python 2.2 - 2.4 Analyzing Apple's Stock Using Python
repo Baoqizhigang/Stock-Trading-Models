@@ -1,0 +1,82 @@
+import numpy and pandas package
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+aapl = pd.read_csv('Data_CSV/apple.csv')
+aapl.head()
+
+# We import the stock data of Apple into Jupyter Notebook. The CSV file is located in the folder called "Data_CSV" in your Workspace
+# We then name the DataFrame name as 'aapl'
+aapl = pd.read_csv('Data_CSV/apple.csv')
+aapl.set_index('Date',inplace = True)
+aapl.loc['2012-08-01':'2013-08-01','Close'].plot()
+
+# Plot a histogram to show the distribution of log return of Apple's stock. 
+# You can see it is very close to a normal distribution
+from scipy.stats import norm
+mu = aapl['LogReturn'].mean()
+sigma = aapl['LogReturn'].std(ddof=1)
+
+density = pd.DataFrame()
+density['x'] = np.arange(aapl['LogReturn'].min()-0.01, aapl['LogReturn'].max()+0.01, 0.001)
+density['pdf'] = norm.pdf(density['x'], mu, sigma)
+
+aapl['LogReturn'].hist(bins=50, figsize=(10, 6))
+plt.plot(density['x'], density['pdf'], color='red')
+plt.show()
+
+from scipy.stats import norm
+density = pd.DataFrame()
+density['x'] = np.arange(-4,4,0.001)
+density['pdf'] = norm.pdf(density['x'],0,1) # get probability density function, 0 = mean; 1 = standard deviation;
+density['cdf'] = norm.cdf(density['x'],0,1) # get cumulative distribution function, 0 = mean; 1 = standard deviation;
+
+from scipy.stats import norm
+density = pd.DataFrame()
+density['x'] = np.arange(-4,4,0.001)
+density['pdf'] = norm.pdf(density['x'],0,1) # get probability density function, 0 = mean; 1 = standard deviation;
+density['cdf'] = norm.cdf(density['x'],0,1) # get cumulative distribution function, 0 = mean; 1 = standard deviation;
+
+plt.plot(density['x'],density['pdf'])
+plt.plot(density['x'],density['cdf'])
+
+# Approxmiate mean and variance of the log daily return
+mu = aapl['LogReturn'].mean()
+sigma = aapl['LogReturn'].std(ddof=1)
+print(mu,sigma)
+
+# What is the chance of losing over 5% in a day?
+denApp = pd.DataFrame()
+denApp['x'] = np.arange(-0.1,0.1,0.001)
+denApp['pdf'] = norm.pdf(denApp['x'], mu, sigma)
+
+plt.ylim(0,20) # sets the y-axis limits for the plot to be from 0 to 20.
+plt.fill_between(x = np.arange(-0.1,-0.01,0.0001),
+                 y2 = 0,
+                 y1 = norm.pdf(np.arange(-0.1,-0.01,0.0001),mu,sigma),
+                 facecolor = 'pink',
+                 alpha = 0.5)
+
+# probability that the stock price of aapl will drop over 5% in a day
+prob_return1 = norm.cdf(-0.05, mu, sigma) 
+print('The probability is ', prob_return1)
+
+# caculate the probability of dropping over 40% in a year(220 trading days)
+# P(Drop over 40% in 220 days)
+
+mu220 = 220*mu
+sigma220 = 220**0.5*sigma
+print(mu220, sigma220)
+
+print('The probability of dropping over 40% in 220 days is ', norm.cdf(-0.4, mu220, sigma220))
+
+# Value at risk(VaR)
+VaR = norm.ppf(0.05, mu, sigma)
+print('Single day value at risk ', VaR)
+
+# Quatile 
+# 5% quantile
+print('5% quantile: ', norm.ppf(0.05, mu, sigma))
+# 95% quantile
+print('95% quantile: ', norm.ppf(0.95, mu, sigma))
