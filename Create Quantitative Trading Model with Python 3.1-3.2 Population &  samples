@@ -1,0 +1,38 @@
+#import numpy and pandas package
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Create a Population DataFrame with 10 data 
+# You may get different results from sampling.
+data = pd.DataFrame()
+data['Population'] = [47,48,85,20,19,13,72,16,50,60]
+
+# Draw sample without replacement, size=5 from Population
+a_sample_without_replacement = data['Population'].sample(5, replace = False)
+print(a_sample_without_replacement)
+
+# Draw sample with replacement, size=5 from Population
+a_sample_with_replacement = data['Population'].sample(5, replace = True)
+print(a_sample_with_replacement)
+
+print('Population mean is', data['Population'].mean())
+print('Population variance is', data['Population'].var(ddof=0)) # denominator of the population variance is N
+print('Population standard deviation is', data['Population'].std(ddof=0)) # denominator of the population variance is N
+print('Population size is', data['Population'].shape[0])  # shape[0] displays only the number of rows
+
+# Calculate sample mean and sample standard deviation, sample size =10
+# You will get different mean and varince every time when you excecute the below code
+a_sample = data['Population'].sample(10, replace = True)
+print('Sample mean is', a_sample.mean())
+print('Sample variance is', a_sample.var(ddof=1)) # denominator of the Sample variance is N - 1
+print('Sample standard deviation is', a_sample.std(ddof=1)) # denominator of the Sample variance is N - 1
+print('Sample size is', a_sample.shape[0]) # shape[0] displays only the number of rows
+
+sample_length = 500
+sample_variance_collection0 = [data['Population'].sample(50,replace=True).var(ddof=0) for i in range(sample_length)]
+sample_variance_collection1 = [data['Population'].sample(50,replace=True).var(ddof=1) for i in range(sample_length)]
+
+print('Population variance is', data['Population'].var(ddof=0))
+print('Average of sample variance with n is', pd.DataFrame(sample_variance_collection0)[0].mean())
+print('Average of sample variance with n-1 is', pd.DataFrame(sample_variance_collection1)[0].mean())
