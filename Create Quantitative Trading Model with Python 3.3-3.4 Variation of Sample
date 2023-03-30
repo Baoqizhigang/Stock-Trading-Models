@@ -1,0 +1,53 @@
+import pandas as pd
+import numpy as np
+from scipy.stats import norm
+%matplotlib inline
+
+# Sample mean and SD keep changing, but always within a certain range
+Fstsample = pd.DataFrame(np.random.normal(10,5,size=30))
+print('Sample mean is ', Fstsample[0].mean())
+print('Sample SD is ', Fstsample[0].std(ddof=1))
+
+# Empirical distribution of sample mean and variance
+meanlist = []
+varlist = []
+for t in range (10000):
+    sample = pd.DataFrame(np.random.normal(10,5,size=30))
+    meanlist.append(sample[0].mean())
+    varlist.append(sample[0].var(ddof=1))
+
+
+collection = pd.DataFrame()
+collection['meanlist'] = meanlist
+collection['varlist'] = varlist
+collection['meanlist'].hist(bins=500,density=True,figsize=(10,4))
+
+collection['varlist'].hist(bins=500,density=True,figsize=(10,4))
+
+# demo in python - population vs empirical 
+pop = pd.DataFrame(np.random.normal(10,5,size=100000))
+
+pop[0].hist(bins=500, color='cyan', density=True)
+collection['meanlist'].hist(bins=500,density=True,color='red',figsize=(10,4))
+
+# Sampling from general distribution
+samplemeanlist = []
+apop = pd.DataFrame([1,0,1,0,1])
+for t in range (100000):
+    sample = apop[0].sample(10,replace=True)
+    samplemeanlist.append(sample.mean())
+
+acollec = pd.DataFrame()
+acollec['meanlist'] = samplemeanlist
+
+acollec['meanlist'].hist(bins=500, color='red',density=True,figsize=(10,4))
+
+samplemeanlist = []
+for t in range(100000):
+    sample = apop[0].sample(2000, replace=True)
+    samplemeanlist.append(sample.mean())
+    
+acollec = pd.DataFrame()
+acollec['meanlist'] = samplemeanlist
+
+acollec['meanlist'].hist(bins=500, color='red',density=True,figsize=(10,4))
