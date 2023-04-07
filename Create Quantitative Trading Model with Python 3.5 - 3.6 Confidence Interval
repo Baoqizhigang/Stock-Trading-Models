@@ -1,0 +1,97 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy.stats as stats
+from scipy.stats import norm
+%matplotlib inline
+
+# calculate the confidence interval: CI = x ± z * (s / sqrt(n))
+
+# sample data
+sample_mean = 160
+sample_std = 5
+sample_size = 50
+
+# z-score for 95% confidence level
+z = norm.ppf(0.975)
+print(f"Z-score for 95% confidence interval: {z}")
+
+# calculate confidence interval
+interval_left = sample_mean - z * (sample_std / np.sqrt(sample_size))
+interval_right = sample_mean + z * (sample_std / np.sqrt(sample_size))
+
+print(f"95% confidence interval: ({interval_left:.2f}, {interval_right:.2f})")
+
+import numpy as np
+from scipy.stats import norm
+
+# Example data set
+data = np.array([1.2, 3.4, 2.3, 4.5, 3.2])
+
+# Calculate sample mean and sample standard deviation
+sample_mean = np.mean(data)
+sample_std = np.std(data, ddof=1)
+
+# Determine confidence level
+confidence_level = 0.8
+
+# Look up Z-value
+# norm.ppf() is the percent point function of the standard normal distribution
+# norm.ppf() returns the critical value for a given probability or percentile
+z_value = norm.ppf((1 + confidence_level) / 2) 
+
+# Calculate standard error
+standard_error = sample_std / np.sqrt(len(data))
+
+# Calculate confidence interval
+lower_bound = sample_mean - z_value * standard_error
+upper_bound = sample_mean + z_value * standard_error
+
+# Print results
+print("Z_value is ", z_value)
+print("Sample Mean is ", sample_mean)
+print("************************************")
+print("{0}% confidence interval is ({1}, {2})".format(int(confidence_level * 100), lower_bound, upper_bound))
+
+# generate a random sample of 100 values from a standard normal distribution
+
+# Generate random sample from standard normal distribution
+sample = np.random.normal(size=100)
+
+# Calculate mean and standard deviation of sample
+mean = np.mean(sample)
+std_dev = np.std(sample, ddof=1)
+
+# Calculate Z-score of a specific value
+value = 1.5
+z_score = (value - mean) / std_dev
+
+# Calculate probability of Z-score being less than a certain value
+prob = stats.norm.cdf(z_score)
+
+print("Z_score of a value of 1.5 is ",z_score)
+print("Probability of z_score is ",prob)
+
+ms = pd.read_csv('Data_CSV/microsoft.csv') #  imports the Microsoft stock data from a CSV file located in the "Data_CSV" folder of the current workspace. 
+ms.set_index('Date',inplace = True) # sets the DataFrame's index to the 'Date' column.
+ms.head()
+
+ms['logReturn'] = np.log(ms['Close'].shift(-1) - np.log(ms['Close']))
+
+# values for calculting the 80% confidence interval
+z_left = norm.ppf(0.1) # left  quantile
+z_right = norm.ppf(0.9) # right quantile
+sample_size = ms['logReturn'].shape[0]
+sample_mean = ms['logReturn'].mean()
+sample_std = ms['logReturn'].std(ddof=1)/sample_size**0.5
+
+# Confidence interval for daily return
+# 80% confidence interval tells you that there will be 90% chance that the average stock return lies between "interval_left" &"interval_right".
+
+interval_left = sample_mean+z_left*sample_std # lower bound
+interval_right = sample_mean+z_right*sample_std # upper bound
+print("Z_left*sample_std is ", z_left*sample_std)
+print("Z_right*sample_std is ", z_right*sample_std)
+print("Smaple Mean is ", sample_mean)
+print("************************************")
+print("80% confidence interval is ",(interval_left, interval_right) )
