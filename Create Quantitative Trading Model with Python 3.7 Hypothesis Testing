@@ -1,0 +1,62 @@
+import pandas as pd
+import numpy as np
+from scipy.stats import norm
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+# import microsoft.csv, and add a new feature - logreturn
+ms = pd.read_csv('Data_CSV/microsoft.csv')
+ms.set_index('Date',inplace = True) # sets the DataFrame's index to the 'Date' column.
+ms['logReturn'] = np.log(ms['Close'].shift(-1)) - np.log(ms['Close'])
+
+# Log return goes up and down during the period
+plt.title("Daily Return of Microsoft from 2014 to 2017", size = 20)
+ms['logReturn'].plot(figsize=(20, 8))
+plt.axhline(0, color='red')
+plt.xlabel("Time", size = 10)
+plt.ylabel("Daily Return", size = 10)
+plt.show()
+
+
+plt.title("Close Price of Microsoft from 2014 to 2017", size = 10)
+plt.xlabel("Time", size = 10)
+plt.ylabel("US $", size = 10)
+plt.plot(ms.loc[:,'Close'])
+
+plt.title("Histogram of Daily Return of Miscorsoft from 2014 to 2017", size = 10)
+ms.loc[:,'logReturn'].dropna().hist(bins = 100,figsize=(10, 4))
+
+xbar = ms['logReturn'].mean() # mean of daily log return of Microsoft
+s = ms['logReturn'].std(ddof=1)
+n = ms['logReturn'].shape[0]
+zhat = (xbar-0)/(s/(n**0.5))
+print(xbar)
+print(zhat)
+
+alpha = 0.05
+zleft = norm.ppf(alpha/2,0,1)
+zright = -zleft
+print('zleft = ',zleft,', zright =',zright)
+print("Rejection region: zhat < {:.4f} or zhat > {:.4f}".format(zleft, zright))
+print('At the significance level of ', alpha)
+print('Shall we reject?:', zhat<zleft or zhat>zright )
+
+alpha = 0.05
+zright = norm.ppf(1-alpha,0,1)
+print("zriht:{:.4f}, zhat:{:.4f}".format(zright,zhat))
+print('At the significance level of ', alpha)
+print('Shall we reject?:', zhat>zright )
+
+
+
+# Null hypothesis mu = 0
+mu = 0
+
+# Test statistic (z-score)
+zhat = 1.6141477140003675
+
+alpha = 0.05
+p = 2 *(1 - norm.cdf(np.abs(zhat), 0, 1))
+print('At the significance level of ', alpha,', p value =', p)
+print('Shall we reject?:', p<alpha )
+
