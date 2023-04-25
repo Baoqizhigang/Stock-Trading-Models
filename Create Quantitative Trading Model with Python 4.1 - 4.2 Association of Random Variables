@@ -1,0 +1,25 @@
+import pandas as pd
+import numpy as np
+from scipy.stats import norm
+%matplotlib inline
+
+# LSTAT: percentage of the population classified as low status
+# INDUS: proportion of non-retail business acres per town
+# NOX: nitric oxide concentrations
+# RM: average number of rooms
+# MEDV: median value of owner-occupied homes in $1000
+housing = pd.read_csv('Data_CSV/housing.csv', index_col=0) # housing price in Boston
+housing.head()
+
+# Quantifying association with covariance
+housing.cov()
+
+# correlation
+housing.corr()
+
+# scatter matrix plot
+from pandas.plotting import scatter_matrix
+sm = scatter_matrix(housing, figsize=(10, 10))
+
+# Observe the association between LSTAT and MEDV
+housing.plot(kind='scatter', x='RM', y='MEDV', figsize=(6,6))
